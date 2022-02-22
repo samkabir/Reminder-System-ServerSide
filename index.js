@@ -25,20 +25,38 @@ async function run(){
 
         //Posting a reimnder
         app.post('/reminders', async (req, res) => {
+
             const reminderOne = req.body;
+            console.log(reminderOne);
             const result = await remindersCollection.insertOne(reminderOne).then( () => {
                 console.log("data inserted");
             });
-            res.json(result);
+            
+            console.log('executing next lines of code');
+            //splitting the time
+            // Example: time ='14:03' 
+            let hour = reminderOne.time.substring(0,1);
+            let minute = reminderOne.time.substring(3,4);
 
-            // //initilizing the reminder
-            // var task = cron.schedule('0 1 * * *', () => {
-            //     console.log(`Running a reminder at ${req.body.time} at ${req.body.timezone}`);
-            // }, {
-            //     scheduled: true,
-            //     timezone: req.body.timezone
-            // });
-            // task.destroy();
+            console.log('time has been split');
+
+            //splitting the day
+            // Example: date ='2022-03-24' 
+            let day = reminderOne.date.substring(8,9);
+            let month = reminderOne.date.substring(6,6);
+
+            console.log('date has been split');
+            
+            //Initilizing the reminder
+            var task = cron.schedule(`* ${minute} ${hour} ${day} ${month} *`, () => {
+                console.log(`Running a reminder at ${reminderOne.time} at ${reminderOne.timezone}`);
+            }, {
+                scheduled: true,
+                // timezone: "America/Sao_Paulo"
+              });
+            task.start();
+
+            console.log('task has been initialised');
         });
 
         
