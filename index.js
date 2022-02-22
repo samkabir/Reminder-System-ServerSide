@@ -32,7 +32,6 @@ async function run(){
                 console.log("data inserted");
             });
             
-            console.log('executing next lines of code');
             //splitting the time
             // Example: time ='14:03' 
             let hour = reminderOne.time.substring(0,1);
